@@ -3,6 +3,9 @@ import { ErrorMessage } from "formik";
 import * as Yup from "yup";
 
 import css from "./RegistrationForm.module.css";
+import { useDispatch } from "react-redux";
+import { register } from "../../redux/auth/operations";
+import Button from "../Button/Button";
 
 const RegisterSchema = Yup.object().shape({
   name: Yup.string()
@@ -23,9 +26,11 @@ const INITIAL_FORM_DATA = {
   password: "",
 };
 
-const RegistrationForm = ({ onRegister }) => {
+const RegistrationForm = () => {
+  const dispatch = useDispatch();
+
   const handleSubmit = (userData, formActions) => {
-    onRegister(userData);
+    dispatch(register(userData));
     formActions.resetForm();
   };
 
@@ -82,14 +87,13 @@ const RegistrationForm = ({ onRegister }) => {
             />
           </label>
 
-          <button
-            className={css.button}
+          <Button
             type="submit"
             title="Click to register user"
             aria-label="Register new user"
           >
-            Sign up
-          </button>
+            Register
+          </Button>
         </Form>
       </Formik>
     </div>

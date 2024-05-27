@@ -1,32 +1,58 @@
-import { Suspense, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import "./App.css";
+import { lazy, useEffect } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
-
-import Home from "../pages/Home/Home";
+import RestrictedRoute from "./RestrictedRoute";
+import PrivateRoute from "./PrivateRoute";
 import Layout from "./Layout/Layout";
-import Registration from "../pages/Registration/Registration";
-import Login from "../pages/Login/Login";
-import Contacts from "../pages/Contacts/Contacts";
+import { useDispatch, useSelector } from "react-redux";
 import { refresh } from "../redux/auth/operations";
+import { selectIsRefreshing } from "../redux/auth/selectors";
+
+const HomePage = lazy(() => import("../pages/HomePage"));
+const RegistrationPage = lazy(() => import("../pages/RegistrationPage"));
+const LoginPage = lazy(() => import("../pages/LoginPage"));
+const ContactsPage = lazy(() => import("../pages/ContactsPage"));
 
 function App() {
   const dispatch = useDispatch();
+  const isRefreshing = useSelector(selectIsRefreshing);
 
   useEffect(() => {
     dispatch(refresh());
   }, [dispatch]);
 
-  return (
+  return isRefreshing ? (
+    <p>Refreshing user...</p>
+  ) : (
     <Layout>
-      <Suspense>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Registration />} />
-          <Route path="/contacts" element={<Contacts />} />
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
-      </Suspense>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route
+          path="/register"
+          element={
+            <RestrictedRoute>
+              <RegistrationPage />
+            </RestrictedRoute>
+          }
+        />
+        <Route
+          path="/login"
+          element={
+            <RestrictedRoute>
+              <LoginPage />
+            </RestrictedRoute>
+          }
+        />
+        <Route
+          path="/contacts"
+          element={
+            <PrivateRoute>
+              <ContactsPage />
+            </PrivateRoute>
+          }
+        />
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
     </Layout>
   );
 }
