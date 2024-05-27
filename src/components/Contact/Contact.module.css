@@ -40,8 +40,8 @@
 
 .contactBtn:hover,
 .contactBtn:active {
-    border-color: rgb(88, 88, 88);
-    background-color: rgba(0, 0, 255, 0.137);
+border-color: rgb(88, 88, 88);
+    background-color: rgba(8, 0, 255, 0.311);
 }
 
 .contactBtn:active,

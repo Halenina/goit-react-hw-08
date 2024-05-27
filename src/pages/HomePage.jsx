@@ -1,4 +1,3 @@
-
 import { useSelector } from "react-redux";
 import { selectIsLoggedIn } from "../redux/auth/selectors";
 import { Link } from "react-router-dom";
@@ -9,7 +8,7 @@ const HomePage = () => {
   return (
     <div>
       <title>Home Page</title>
-      <h3>You are in the Contact organiser.</h3>
+      <h3>Welcome to the Phone book.</h3>
 
       <p>
         To see and add contacts
